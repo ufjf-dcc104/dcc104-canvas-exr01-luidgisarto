@@ -15,29 +15,95 @@
 </body>
 <script>
     var eCanvas = document.getElementsByTagName("canvas")[0];
-    eCanvas.width = 600;
-    eCanvas.height = 500;
     var ctx = eCanvas.getContext("2d");
+    var nave = new Sprite();
+    var vidas = 5;
+    var pontos = 0;
 
-    //Desenha borda canvas
-    ctx.clearRect(0, 0, eCanvas.width, eCanvas.height);
-    ctx.strokeRect(0, 0, eCanvas.width, eCanvas.height);
+    inicializar(eCanvas, ctx, nave);
+    desenha();
 
-    //Desenha energia
-    ctx.fillStyle = "lime";
-    ctx.fillRect(40, 30, 170, 20);
-    ctx.strokeRect(40, 30, 170, 20);
+    function desenha() {
+        var anterior = new Date();
+        var atual = new Date();
+        var dt = (anterior - atual)/1000;
+        requestAnimationFrame(desenha);
+        // nave.mover(dt);
+        // nave.desenhar(ctx);
+        habilitarControles(nave);
+        // anterior = atual;
+    }
 
-    //Desenha nave
-    ctx.fillStyle = "blue";
-    ctx.fillRect(eCanvas.width/3, eCanvas.height/3, 50, 60);
+    function inicializar(eCanvas, ctx, nave) {
+        eCanvas.width = 600;
+        eCanvas.height = 500;
+        ctx.font = "20px Arial";
 
-    //Desenha base de pouso
-    ctx.fillStyle = "red";
-    ctx.fillRect(240, eCanvas.height - 10, 80, 20);
-    
-    var sprite = new Sprite();
+        //Desenha borda canvas
+        ctx.clearRect(0, 0, eCanvas.width, eCanvas.height);
+        ctx.strokeRect(0, 0, eCanvas.width, eCanvas.height);
 
-    sprite.desenhar();
+        //Desenha pontos e vida
+        ctx.fillText("Vidas:" + vidas, eCanvas.width - 100, 30);
+        ctx.fillText("Pontos:" + pontos, eCanvas.width - 100, 50);
+
+        //Desenha energia
+        ctx.fillText("Energia:" + nave.energia, 40, 30);
+        ctx.fillStyle = "lime";
+        ctx.fillRect(40, 40, 170, 20);
+        ctx.strokeRect(40, 40, 170, 20);
+
+        //Desenha nave
+        ctx.fillStyle = "blue";
+        ctx.fillRect(eCanvas.width / 3, eCanvas.height / 3, 50, 60);
+
+        //Desenha base de pouso
+        ctx.fillStyle = "red";
+        ctx.fillRect(240, eCanvas.height - 10, 80, 20);
+    }
+
+    function habilitarControles(nave) {
+        addEventListener("keydown", function (e) {
+            switch (e.keyCode) {
+                case 32:
+                    nave.vy = nave.vy - 80;
+                    break;
+                case 37:
+                    nave.ax = -400;
+                    break;
+                case 38:
+                    nave.ay = -100;
+                    break;
+                case 39:
+                    nave.ax = +100;
+                    break;
+                case 40:
+                    nave.ay = +100;
+                    break;
+                default:
+            }
+            console.log(nave);
+
+        });
+
+        addEventListener("keyup", function (e) {
+            switch (e.keyCode) {
+                case 37:
+                    nave.ax = 0;
+                    break;
+                case 38:
+                    nave.ay = 0;
+                    break;
+                case 39:
+                    nave.ax = 0;
+                    break;
+                case 40:
+                    nave.ay = 0;
+                    break;
+                default:
+
+            }
+        });
+    }
 
 </script>
