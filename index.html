@@ -50,7 +50,16 @@
     }
 
     function pousou(nave) {
-        
+        if((parseInt(nave.x) == 515 && parseInt(nave.y) == 430)){
+            nave.vx = 0;
+            nave.ax = 0;
+            nave.ay = 0;
+            nave.vy = 0;
+
+            return true;
+        }     
+
+         return false;
     }
 
     function acumularPontos(nave) {
