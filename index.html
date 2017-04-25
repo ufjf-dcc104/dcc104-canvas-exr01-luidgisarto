@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DCC104 - Exemplo 02</title>
+    <title>DCC104 - Moon Lander</title>
     <!--<script src="ImageLoader.js" charset="utf-8"></script>-->
     <script src="sprite.js" charset="utf-8"></script>
     <!--<script src="Level.js" charset="utf-8"></script>-->
@@ -11,79 +11,81 @@
 
 <body>
     <h1>DCC104 - Moon Lander</h1>
-    <canvas></canvas>
+    <canvas width="700" height="500" style="border:1px solid black">
+        Seu navegador não tem suporte ao canvas! Atualize seu navegador.
+    </canvas>
 </body>
 <script>
-    var eCanvas = document.getElementsByTagName("canvas")[0];
-    var ctx = eCanvas.getContext("2d");
+    var tela = document.getElementsByTagName("canvas")[0];
+    var ctx = tela.getContext("2d");
     var nave = new Sprite();
     var vidas = 5;
     var pontos = 0;
+    var gravidade = 1.7;
 
-    inicializar(eCanvas, ctx, nave);
     desenha();
 
     function desenha() {
-        var anterior = new Date();
-        var atual = new Date();
-        var dt = (anterior - atual)/1000;
+        var fps = 50;
+        var dt = 1 / fps;
         requestAnimationFrame(desenha);
-        // nave.mover(dt);
-        // nave.desenhar(ctx);
+        inicializar(tela, ctx, nave);   
+        nave.mover(dt);
+        nave.desenhar(ctx);
         habilitarControles(nave);
-        // anterior = atual;
     }
 
-    function inicializar(eCanvas, ctx, nave) {
-        eCanvas.width = 600;
-        eCanvas.height = 500;
-        ctx.font = "20px Arial";
+    function acumularPontos(){
 
-        //Desenha borda canvas
-        ctx.clearRect(0, 0, eCanvas.width, eCanvas.height);
-        ctx.strokeRect(0, 0, eCanvas.width, eCanvas.height);
+    }
+
+    function inicializar(tela, ctx, nave) {
+
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "black";
+
+        //Limpa a tela de desenho
+        ctx.clearRect(0, 0, tela.width, tela.height);                
 
         //Desenha pontos e vida
-        ctx.fillText("Vidas:" + vidas, eCanvas.width - 100, 30);
-        ctx.fillText("Pontos:" + pontos, eCanvas.width - 100, 50);
+        ctx.fillText("Vidas:" + vidas, tela.width - 100, 30);
+        ctx.fillText("Pontos:" + pontos, tela.width - 100, 50);
+
+          //Desenha velocidade
+        ctx.fillText("Velocidade X:" + parseFloat(nave.vx).toFixed(2) + "km/h", 40, 30);
+        ctx.fillText("Velocidade Y:" + parseFloat(nave.vy).toFixed(2) + "km/h", 40, 50);
 
         //Desenha energia
-        ctx.fillText("Energia:" + nave.energia, 40, 30);
+        ctx.fillText("Energia:" + nave.energia, 40, 70);
         ctx.fillStyle = "lime";
-        ctx.fillRect(40, 40, 170, 20);
-        ctx.strokeRect(40, 40, 170, 20);
-
-        //Desenha nave
-        ctx.fillStyle = "blue";
-        ctx.fillRect(eCanvas.width / 3, eCanvas.height / 3, 50, 60);
+        ctx.fillRect(40, 80, 170, 20);
+        ctx.strokeRect(40, 80, 170, 20);
 
         //Desenha base de pouso
         ctx.fillStyle = "red";
-        ctx.fillRect(240, eCanvas.height - 10, 80, 20);
+        ctx.fillRect(240, tela.height - 10, 80, 20);
+
+        //Desenha base de ínicio
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, tela.height - 10, 80, 20);
     }
 
     function habilitarControles(nave) {
         addEventListener("keydown", function (e) {
             switch (e.keyCode) {
-                case 32:
-                    nave.vy = nave.vy - 80;
-                    break;
                 case 37:
-                    nave.ax = -400;
-                    break;
-                case 38:
-                    nave.ay = -100;
+                    nave.ax = -250/gravidade;
                     break;
                 case 39:
-                    nave.ax = +100;
+                    nave.ax = 250/gravidade;
+                    break;
+                case 38:
+                    nave.ay = -250/gravidade;
                     break;
                 case 40:
-                    nave.ay = +100;
+                    nave.ay = 250/gravidade;
                     break;
-                default:
             }
-            console.log(nave);
-
         });
 
         addEventListener("keyup", function (e) {
@@ -91,17 +93,15 @@
                 case 37:
                     nave.ax = 0;
                     break;
-                case 38:
-                    nave.ay = 0;
-                    break;
                 case 39:
                     nave.ax = 0;
                     break;
+                case 38:
+                    nave.ay = 0;
+                    break;                
                 case 40:
                     nave.ay = 0;
                     break;
-                default:
-
             }
         });
     }
