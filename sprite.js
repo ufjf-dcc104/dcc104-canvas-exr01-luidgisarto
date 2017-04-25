@@ -12,11 +12,22 @@ function Sprite() {
   this.cooldown = 0;
 }
 
+function Sprite(x, y, w, h, cor){
+  this.x = x;
+  this.y = y;
+  this.width = w;
+  this.height = h;
+  this.color = cor;
+  this.vx = 0;
+  this.vy = 0;
+  this.ax = 0;
+  this.ay = 0;
+  this.energia = 300;
+}
 
 Sprite.prototype.desenhar = function (ctx) {
-  //Desenha nave
   ctx.fillStyle = this.color;
-  ctx.fillRect(this.x, this.y, 50, 60);
+  ctx.fillRect(this.x, this.y, this.width, this.height);
 };
 
 Sprite.prototype.mover = function (dt) {
@@ -28,9 +39,14 @@ Sprite.prototype.mover = function (dt) {
   this.consumirEnergia();
 };
 
-Sprite.prototype.consumirEnergia = function (){
-  if(this.ax > 0 || this.ay > 0){
-    this.energia = this.energia - Math.floor(Math.random() *1.7);
+Sprite.prototype.consumirEnergia = function () {
+  if (this.ax != 0 || this.ay != 0) {
+    if(this.ax > this.ay){
+      this.energia = this.energia - Math.floor(Math.random() * 3);
+    }
+    else{
+      this.energia = this.energia - Math.floor(Math.random() * 2);
+    }
   }
 }
 
