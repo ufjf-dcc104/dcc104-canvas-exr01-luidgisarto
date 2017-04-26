@@ -37,8 +37,8 @@
         habilitarControles(nave);
 
         if (!vidasEsgotadas()) {
-
-            if (nave.ultrapassouAlturaPouso(basePouso) || nave.atingiuLimites(tela)) {
+            // nave.ultrapassouAlturaPouso(basePouso) || 
+            if (nave.atingiuLimites(tela)) {
                 nave = iniciarNave();
                 vidas--;
             }
@@ -50,7 +50,7 @@
 
             if (pousou(nave)) {
                 ctx.fillStyle = "black";
-                ctx.font = "40px Verdana";
+                ctx.font = "30px Verdana";
                 ctx.fillText("VOCÊ ALCANÇOU SEU OBJETIVO! ", 160, 250);
                 ctx.strokeText("VOCÊ ALCANÇOU SEU OBJETIVO! ", 160, 250);
                 ctx.fillText("PONTOS = " + pontos, 270, 280);
