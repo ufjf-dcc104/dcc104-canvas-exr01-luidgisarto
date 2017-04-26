@@ -50,4 +50,18 @@ Sprite.prototype.consumirEnergia = function () {
   }
 }
 
+Sprite.prototype.ultrapassouAlturaPouso = function(base){
+  if(this.y > 431)
+    return true;
+  return false;
+}
+
+Sprite.prototype.atingiuLimites = function(tela){
+  if(this.y < 0 
+  || this.x < 0
+  || this.x > tela.width
+  || this.y > tela.height)
+    return true;
+  return false;
+}
 

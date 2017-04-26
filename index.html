@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>DCC104 - Moon Lander</title>
-    <!--<script src="ImageLoader.js" charset="utf-8"></script>-->
     <script src="sprite.js" charset="utf-8"></script>
-    <!--<script src="Level.js" charset="utf-8"></script>-->
 </head>
 
 <body>
@@ -38,28 +36,51 @@
         nave.desenhar(ctx);
         habilitarControles(nave);
 
-        if (consumoEsgotado(nave)) {
-            vidas--;
-            nave.energia = 300;
-        }
+        if (!vidasEsgotadas()) {
 
-        if (pousou(nave)) {
-            ctx.fillText("VOCÊ ALCANÇOU SEU OBJETIVO! ", 160, 250);
-            ctx.fillText("PONTOS = " + pontos, 270, 280);
+            if (nave.ultrapassouAlturaPouso(basePouso) || nave.atingiuLimites(tela)) {
+                nave = iniciarNave();
+                vidas--;
+            }
+
+            if (consumoEsgotado(nave)) {
+                vidas--;
+                nave.energia = 300;
+            }
+
+            if (pousou(nave)) {
+                ctx.fillStyle = "black";
+                ctx.font = "40px Verdana";
+                ctx.fillText("VOCÊ ALCANÇOU SEU OBJETIVO! ", 160, 250);
+                ctx.strokeText("VOCÊ ALCANÇOU SEU OBJETIVO! ", 160, 250);
+                ctx.fillText("PONTOS = " + pontos, 270, 280);
+            }
+        }
+        else {
+            ctx.font = "40px Verdana";
+            ctx.fillStyle = "red";
+            ctx.fillText("GAME OVER ", 280, 250);
+            ctx.strokeText("GAME OVER ", 280, 250);
+            ctx.font = "20px Verdana";
+            ctx.fillStyle = "grey";
+            ctx.fillText("PONTOS = " + pontos, 330, 280);
+            ctx.strokeText("PONTOS = " + pontos, 330, 280);
         }
     }
 
     function pousou(nave) {
-        if((parseInt(nave.x) == 515 && parseInt(nave.y) == 430)){
+        if ((parseInt(nave.x) == 515
+            && parseInt(nave.y) == 431)
+            && nave.vx < 10 && nave.vy < 10) {
             nave.vx = 0;
             nave.ax = 0;
             nave.ay = 0;
             nave.vy = 0;
 
             return true;
-        }     
+        }
 
-         return false;
+        return false;
     }
 
     function acumularPontos(nave) {
@@ -79,6 +100,10 @@
         return new Sprite(10, 190, 50, 60, "blue");
     }
 
+    function vidasEsgotadas() {
+        return vidas == 0;
+    }
+
     function inicializar(tela, ctx, nave) {
 
         ctx.font = "20px Arial";
@@ -88,18 +113,20 @@
         ctx.clearRect(0, 0, tela.width, tela.height);
 
         //Desenha pontos e vida
-        ctx.fillText("Vidas: " + vidas, tela.width - 100, 30);
-        ctx.fillText("Pontos: " + pontos, tela.width - 100, 50);
+        ctx.fillText("Vidas: " + vidas, tela.width - 150, 30);
+        ctx.fillText("Pontos: " + pontos, tela.width - 150, 50);
+        ctx.fillText("X: " + parseInt(nave.x), tela.width - 150, 70);
+        ctx.fillText("Y: " + parseInt(nave.y), tela.width - 150, 90);
 
         //Desenha velocidade
-        ctx.fillText("Velocidade X: " + parseFloat(nave.vx).toFixed(2) + "km/h", 40, 30);
-        ctx.fillText("Velocidade Y: " + parseFloat(nave.vy).toFixed(2) + "km/h", 40, 50);
+        ctx.fillText("Velocidade X: " + parseFloat(nave.vx).toFixed(2) + "km/h", 40, 70);
+        ctx.fillText("Velocidade Y: " + parseFloat(nave.vy).toFixed(2) + "km/h", 40, 90);
 
         //Desenha energia
-        ctx.fillText("Energia: " + nave.energia, 40, 70);
+        ctx.fillText("Energia: " + nave.energia, 40, 110);
         ctx.fillStyle = "lime";
-        ctx.fillRect(40, 80, nave.energia, 20);
-        ctx.strokeRect(40, 80, nave.energia, 20);
+        ctx.fillRect(40, 120, nave.energia, 20);
+        ctx.strokeRect(40, 120, nave.energia, 20);
 
         //Desenha base de pouso
         basePouso.desenhar(ctx);
@@ -109,39 +136,41 @@
     }
 
     function habilitarControles(nave) {
-        addEventListener("keydown", function (e) {
-            switch (e.keyCode) {
-                case 37:
-                    nave.ax = -250 / gravidade;
-                    break;
-                case 39:
-                    nave.ax = 250 / gravidade;
-                    break;
-                case 38:
-                    nave.ay = -250 / gravidade;
-                    break;
-                case 40:
-                    nave.ay = 250 / gravidade;
-                    break;
-            }
-        });
+        if (vidas > 0  && !pousou(nave)) {
+            addEventListener("keydown", function (e) {
+                switch (e.keyCode) {
+                    case 37:
+                        nave.ax = -250 / gravidade;
+                        break;
+                    case 39:
+                        nave.ax = 250 / gravidade;
+                        break;
+                    case 38:
+                        nave.ay = -250 / gravidade;
+                        break;
+                    case 40:
+                        nave.ay = 250 / gravidade;
+                        break;
+                }
+            });
 
-        addEventListener("keyup", function (e) {
-            switch (e.keyCode) {
-                case 37:
-                    nave.ax = 0;
-                    break;
-                case 39:
-                    nave.ax = 0;
-                    break;
-                case 38:
-                    nave.ay = 0;
-                    break;
-                case 40:
-                    nave.ay = 0;
-                    break;
-            }
-        });
+            addEventListener("keyup", function (e) {
+                switch (e.keyCode) {
+                    case 37:
+                        nave.ax = 0;
+                        break;
+                    case 39:
+                        nave.ax = 0;
+                        break;
+                    case 38:
+                        nave.ay = 0;
+                        break;
+                    case 40:
+                        nave.ay = 0;
+                        break;
+                }
+            });
+        }
     }
 
 </script>
