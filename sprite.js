@@ -5,11 +5,11 @@ function Sprite() {
   this.vy = 0;
   this.ax = 0;
   this.ay = 0;
+  this.g = 0;
   this.width = 30;
   this.height = 30;
   this.color = "blue";
   this.energia = 500;
-  this.cooldown = 0;
 }
 
 function Sprite(x, y, w, h, cor){
@@ -25,17 +25,15 @@ function Sprite(x, y, w, h, cor){
   this.energia = 300;
 }
 
-Sprite.prototype.desenhar = function (ctx) {
+Sprite.prototype.desenhar = function (ctx, img) {
   ctx.fillStyle = this.color;
-  ctx.fillRect(this.x, this.y, this.width, this.height);
+  ctx.drawImage(img, this.x, this.y, this.width, this.height);
 };
 
 Sprite.prototype.mover = function (dt) {
-  this.vx = this.vx + this.ax * dt;
-  this.x = this.x + this.vx * dt;
-  this.vy = this.vy + this.ay * dt;
-  this.y = this.y + this.vy * dt;
-
+  this.x += this.vx * dt;
+  this.y += this.vy * dt;
+  this.g += this.g * dt;
   this.consumirEnergia();
 };
 

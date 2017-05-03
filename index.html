@@ -5,11 +5,12 @@
     <meta charset="utf-8">
     <title>DCC104 - Moon Lander</title>
     <script src="sprite.js" charset="utf-8"></script>
+    <script src="images.js" charset="utf-8"></script>
 </head>
 
 <body>
     <h1>DCC104 - Moon Lander</h1>
-    <canvas width="800" height="500" style="border:1px solid black">
+    <canvas width="800" height="500" style="border:1px solid black;background-image: url('images/fundo.png');">
         Seu navegador não tem suporte ao canvas! Atualize seu navegador.
     </canvas>
 </body>
@@ -18,22 +19,25 @@
     var ctx = tela.getContext("2d");
     var alturaBase = (tela.height - 10);
     var nave = iniciarNave();
+    nave.g = 700;
+    nave.vy = 20 + Math.floor(Math.random()*50)
+    nave.vx = 20 + Math.floor(Math.random()*50);
     var baseInicio = new Sprite(0, 250, 80, 10, "black");
-    var basePouso = new Sprite(500, alturaBase, 80, 10, "red");
+    var basePouso = new Sprite(Math.floor(Math.random() * 500), alturaBase-100, 200, 100, "red");
     var vidas = 5;
     var pontos = 0;
-    var gravidade = 1.7;
-
+    var il = new ImageLoader();
+    il.inicializar();
     desenha();
 
     function desenha() {
-        var fps = 50;
+        var fps = 120;
         var dt = 1 / fps;
         requestAnimationFrame(desenha);
         inicializar(tela, ctx, nave);
         nave.mover(dt);
         acumularPontos(nave);
-        nave.desenhar(ctx);
+        nave.desenhar(ctx, il.images["nave"]);
         habilitarControles(nave);
 
         if (!vidasEsgotadas()) {
@@ -97,7 +101,7 @@
     }
 
     function iniciarNave() {
-        return new Sprite(10, 190, 50, 60, "blue");
+        return new Sprite(tela.width/2, 0, 60, 100, "blue");
     }
 
     function vidasEsgotadas() {
@@ -107,7 +111,7 @@
     function inicializar(tela, ctx, nave) {
 
         ctx.font = "20px Arial";
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "white";
 
         //Limpa a tela de desenho
         ctx.clearRect(0, 0, tela.width, tela.height);
@@ -119,37 +123,38 @@
         ctx.fillText("Y: " + parseInt(nave.y), tela.width - 150, 90);
 
         //Desenha velocidade
-        ctx.fillText("Velocidade X: " + parseFloat(nave.vx).toFixed(2) + "km/h", 40, 70);
-        ctx.fillText("Velocidade Y: " + parseFloat(nave.vy).toFixed(2) + "km/h", 40, 90);
+        ctx.fillText("VX: " + parseFloat(nave.vx).toFixed(2) + "km/h", 10, 20);
+        ctx.fillText("VY: " + parseFloat(nave.vy).toFixed(2) + "km/h", 10, 40);
 
         //Desenha energia
-        ctx.fillText("Energia: " + nave.energia, 40, 110);
+        ctx.fillText("Energia: " + nave.energia, 10, 60);
         ctx.fillStyle = "lime";
-        ctx.fillRect(40, 120, nave.energia, 20);
-        ctx.strokeRect(40, 120, nave.energia, 20);
+        ctx.fillRect(10, 70, nave.energia, 20);
+        ctx.strokeRect(10, 70, nave.energia, 20);
 
         //Desenha base de pouso
-        basePouso.desenhar(ctx);
+        basePouso.desenhar(ctx, il.images["base"]);
 
         //Desenha base de ínicio
-        baseInicio.desenhar(ctx);
+        // baseInicio.desenhar(ctx);
     }
 
     function habilitarControles(nave) {
         if (vidas > 0  && !pousou(nave)) {
             addEventListener("keydown", function (e) {
+                console.log(e.keyCode);
                 switch (e.keyCode) {
-                    case 37:
-                        nave.ax = -250 / gravidade;
+                    case 37: //seta esquerda
+                        nave.vx = -Math.floor(Math.random() * 100);
                         break;
-                    case 39:
-                        nave.ax = 250 / gravidade;
+                    case 39: //seta direita
+                        nave.vx = Math.floor(Math.random() * 100);
                         break;
                     case 38:
-                        nave.ay = -250 / gravidade;
+                        nave.vy = -Math.floor(Math.random() * 100);
                         break;
                     case 40:
-                        nave.ay = 250 / gravidade;
+                        nave.vy = Math.floor(Math.random() * 100);
                         break;
                 }
             });
@@ -157,16 +162,16 @@
             addEventListener("keyup", function (e) {
                 switch (e.keyCode) {
                     case 37:
-                        nave.ax = 0;
+                        nave.vx = 0;
                         break;
                     case 39:
-                        nave.ax = 0;
+                        nave.vy = 0;
                         break;
                     case 38:
-                        nave.ay = 0;
+                        nave.vy = 0;
                         break;
                     case 40:
-                        nave.ay = 0;
+                        nave.vx = 0;
                         break;
                 }
             });
