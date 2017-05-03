@@ -41,7 +41,7 @@
         habilitarControles(nave);
 
         if (!vidasEsgotadas()) {
-            // nave.ultrapassouAlturaPouso(basePouso) || 
+            // nave.ultrapassouAlturaPouso(basePouso) ||
             if (nave.atingiuLimites(tela)) {
                 nave = iniciarNave();
                 vidas--;
@@ -73,15 +73,8 @@
     }
 
     function pousou(nave) {
-        if ((parseInt(nave.x) == 515
-            && parseInt(nave.y) == 431)
-            && nave.vx < 10 && nave.vy < 10) {
-            nave.vx = 0;
-            nave.ax = 0;
-            nave.ay = 0;
-            nave.vy = 0;
-
-            return true;
+        if(nave.colidiu(basePouso)){
+          console.log('teste');
         }
 
         return false;
@@ -142,19 +135,18 @@
     function habilitarControles(nave) {
         if (vidas > 0  && !pousou(nave)) {
             addEventListener("keydown", function (e) {
-                console.log(e.keyCode);
                 switch (e.keyCode) {
                     case 37: //seta esquerda
-                        nave.vx = -Math.floor(Math.random() * 100);
+                        nave.vx = -Math.floor(Math.random() * 100) + 10;
                         break;
                     case 39: //seta direita
-                        nave.vx = Math.floor(Math.random() * 100);
+                        nave.vx = Math.floor(Math.random() * 100) + 10;
                         break;
                     case 38:
-                        nave.vy = -Math.floor(Math.random() * 100);
+                        nave.vy = -Math.floor(Math.random() * 100) + 10;
                         break;
                     case 40:
-                        nave.vy = Math.floor(Math.random() * 100);
+                        nave.vy = Math.floor(Math.random() * 100) + 10;
                         break;
                 }
             });
@@ -162,16 +154,16 @@
             addEventListener("keyup", function (e) {
                 switch (e.keyCode) {
                     case 37:
-                        nave.vx = 0;
+                        nave.vx = -Math.floor(Math.random() * 100) - 10;
                         break;
                     case 39:
-                        nave.vy = 0;
+                        nave.vy = Math.floor(Math.random() * 100) - 10;
                         break;
                     case 38:
-                        nave.vy = 0;
+                        nave.vy = Math.floor(Math.random() * 100) - 10;
                         break;
                     case 40:
-                        nave.vx = 0;
+                        nave.vx = -Math.floor(Math.random() * 100) - 10;
                         break;
                 }
             });

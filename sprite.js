@@ -27,7 +27,9 @@ function Sprite(x, y, w, h, cor){
 
 Sprite.prototype.desenhar = function (ctx, img) {
   ctx.fillStyle = this.color;
-  ctx.drawImage(img, this.x, this.y, this.width, this.height);
+  ctx.drawImage(img, this.x-this.width/2, this.y-this.height/2, this.width, this.height);
+  ctx.strokeStyle = "white";
+  ctx.strokeRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height);
 };
 
 Sprite.prototype.mover = function (dt) {
@@ -55,7 +57,7 @@ Sprite.prototype.ultrapassouAlturaPouso = function(base){
 }
 
 Sprite.prototype.atingiuLimites = function(tela){
-  if(this.y < 0 
+  if(this.y < 0
   || this.x < 0
   || this.x > tela.width
   || this.y > tela.height)
@@ -63,3 +65,10 @@ Sprite.prototype.atingiuLimites = function(tela){
   return false;
 }
 
+Sprite.prototype.colidiu = function (alvo) {
+  if(this.x + this.width/2 < alvo.x-alvo.width/2) return false;
+  if(this.x -this.width/2 > alvo.x+alvo.width/2) return false;
+  if(this.y + this.height/2 < alvo.y-alvo.height/2) return false;
+  if(this.y -this.height/2 > alvo.y+alvo.height/2) return false;
+  return true;  
+};
