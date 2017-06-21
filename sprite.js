@@ -29,7 +29,7 @@ Sprite.prototype.desenhar = function (ctx, img) {
   ctx.fillStyle = this.color;
   ctx.drawImage(img, this.x-this.width/2, this.y-this.height/2, this.width, this.height);
   ctx.strokeStyle = "white";
-  ctx.strokeRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height);
+  // ctx.strokeRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height);
 };
 
 Sprite.prototype.mover = function (dt) {
@@ -69,6 +69,6 @@ Sprite.prototype.colidiu = function (alvo) {
   if(this.x + this.width/2 < alvo.x-alvo.width/2) return false;
   if(this.x -this.width/2 > alvo.x+alvo.width/2) return false;
   if(this.y + this.height/2 < alvo.y-alvo.height/2) return false;
-  if(this.y -this.height/2 > alvo.y+alvo.height/2) return false;
+  if(this.y-this.height/2 > alvo.y+alvo.height/2) return false;
   return true;  
 };

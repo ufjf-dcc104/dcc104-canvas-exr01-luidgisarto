@@ -74,7 +74,17 @@
 
     function pousou(nave) {
         if(nave.colidiu(basePouso)){
-          console.log('teste');
+          if(nave.vx < 100){
+              nave.x = basePouso.x - 10;
+              nave.y = basePouso.y - 50;
+              nave.vy = 0;
+              nave.vx = 0;
+              nave.g = 0;
+              ctx.font = "20px Verdana";
+              ctx.fillStyle = "white";
+              ctx.fillText("Parabéns, você conseguiu pousar a nave !", 200, 200);
+          }
+          
         }
 
         return false;
@@ -111,9 +121,9 @@
 
         //Desenha pontos e vida
         ctx.fillText("Vidas: " + vidas, tela.width - 150, 30);
-        ctx.fillText("Pontos: " + pontos, tela.width - 150, 50);
-        ctx.fillText("X: " + parseInt(nave.x), tela.width - 150, 70);
-        ctx.fillText("Y: " + parseInt(nave.y), tela.width - 150, 90);
+        // ctx.fillText("Pontos: " + pontos, tela.width - 150, 50);
+        ctx.fillText("X: " + parseInt(nave.x), tela.width - 150, 50);
+        ctx.fillText("Y: " + parseInt(nave.y), tela.width - 150, 70);
 
         //Desenha velocidade
         ctx.fillText("VX: " + parseFloat(nave.vx).toFixed(2) + "km/h", 10, 20);
